@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Tic-Tac-Toe</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Tilt+Prism&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+        <style>
+            h1{
+                margin: 10px auto;
+            }
+            .heading{
+                font-family: 'Tilt Prism', cursive;
+                font-size: 36px;
+                font-weight: 50;
+                text-align: center;
+                border: none;
+            }
+            .game-pane{
+                position: relative;
+                height: 500px;
+                width: auto;
+                margin: 0 auto;
+                border: none;
+            }
+            .grid{
+                display: grid;
+                grid-template-columns: 100px 100px 100px;
+                border: none;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin-left: -150px;
+                margin-top: -150px;
+                font-family: 'Nunito', sans-serif;
+                font-weight: 500;
+            }
+            .cell{
+                height: 100px;
+                border: 2px solid black;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 50px;
+            }
+            .hidden{
+                display: none;
+            }
+            .outlineText{
+                color: red;
+            }
+            .remove-border-left{
+                border-left: none;
+            }
+            .remove-border-right{
+                border-right: none;
+            }
+            .remove-border-top{
+                border-top: none;
+            }
+            .remove-border-bottom{
+                border-bottom: none;
+            }
+            #result{
+                width: auto;
+                position: absolute;
+                bottom: 10px;
+                left: 0;
+                right: 0;
+                margin-left: auto;
+                margin-right: auto;
+                font-family: 'DM Sans', sans-serif;
+                font-size: 20px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="heading">
+            <h1>Tic-Tac-Toe</h1>
+        </div>
+        <div class="game-pane">
+            <div class="grid">
+                <div class="cell remove-border-top remove-border-left" data-index="1" id="c1"></div>
+                <div class="cell remove-border-top" data-index="2" id="c2"></div>
+                <div class="cell remove-border-top remove-border-right" data-index="3" id="c3"></div>
+                <div class="cell remove-border-left" data-index="4" id="c4"></div>
+                <div class="cell " data-index="5" id="c5"></div>
+                <div class="cell remove-border-right" data-index="6" id="c6"></div>
+                <div class="cell remove-border-bottom remove-border-left" data-index="7" id="c7"></div>
+                <div class="cell remove-border-bottom" data-index="8" id="c8"></div>
+                <div class="cell remove-border-bottom remove-border-right" data-index="9" id="c9"></div>
+            </div>
+            <div class="hidden" id="result">
+                <p>The Winner is: <span id="winner"></span></p>
+            </div>
+        </div>
+        
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script>
+            let winningCondition = [
+                [1,2,3],
+                [4,5,6],
+                [7,8,9],
+                [1,4,7],
+                [2,5,8],
+                [3,6,9],
+                [1,5,9],
+                [3,5,7]
+            ]
+            let currentPlayer = "X";
+            let currentState = {
+                X:[],
+                O:[]
+            }
+            let available = [1,2,3,4,5,6,7,8,9];
+            let plays = 0;
+            let selectArray = 0;
+            var result;
+            var validMove = false;
+
+            $(document).ready(function(){
+                $('.cell').on("click", function(){
+                    
+
+                    if($.inArray(parseInt($(this).attr("data-index")), available) >= 0){
+                        validMove = true;
+                        available.splice($.inArray(parseInt($(this).attr("data-index")), available), 1);
+                        $(this).text(currentPlayer);
+                        plays = plays + 1;
+                        currentState[currentPlayer].push(parseInt($(this).attr("data-index")));
+                    }
+
+                    // $(this).text(currentPlayer);
+                    // currentState[currentPlayer].push(parseInt($(this).attr("data-index")));
+                    result = isWinner();
+                    if(result){
+                        $("#result").removeClass("hidden");
+                        $("#winner").text(currentPlayer);
+                        for (let i = 0; i < winningCondition[selectArray].length; i++) {
+                            console.log("c" + winningCondition[selectArray][i]);
+                            $("#c" + winningCondition[selectArray][i]).addClass("outlineText");  
+                        }
+                        $("h1").text("press any key to restart")
+                        $(document).keypress(function(){
+                            gameOver();
+                        });
+                    }
+                    if(plays == 9 && result === false){
+                        $("#result").removeClass("hidden");
+                        $("#result").text("DRAW");
+                        $("h1").text("press any key to restart")
+                        $(document).keypress(function(){
+                            gameOver();
+                        });
+                    }
+                    if (validMove === true){
+                        currentPlayer = (currentPlayer === "X")? "O": "X" ;
+                        validMove = false;
+                    }
+                    // currentPlayer = (currentPlayer === "X")? "O": "X" ;
+                });
+                   
+            });
+
+
+
+            function isWinner(){
+                if (plays < 5) {
+                    return false;
+                }
+                for (let i = 0; i < winningCondition.length; i++) {
+                    let flag = 1;
+                    for (let j = 0; j < winningCondition[i].length; j++) {
+                        if($.inArray(winningCondition[i][j], currentState[currentPlayer]) < 0){
+                            flag = 0;
+                            break;
+                        }
+                    }
+                    if(flag == 1){
+                        selectArray = i;
+                        return true;
+                    }                         
+                }
+                return false;
+            } 
+            function gameOver() {
+                $("h1").text("Tic-Tac-Toe");
+                currentPlayer = "X";
+                currentState = {
+                    X:[],
+                    O:[]
+                }
+                available = [1,2,3,4,5,6,7,8,9];
+                plays = 0;
+                for (let i = 0; i < winningCondition[selectArray].length; i++) {
+                    $("#c" + winningCondition[selectArray][i]).removeClass("outlineText");
+                    
+                }
+                selectArray = 0;
+                for (let i = 1; i < 10; i++) {
+                    $("#c" + i).text("");  
+                }
+                $("#result").addClass("hidden");
+            }   
+            
+        </script>
+    </body>
+</html>
