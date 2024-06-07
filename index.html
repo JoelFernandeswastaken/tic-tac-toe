@@ -85,6 +85,32 @@
                 font-size: 20px;
                 text-align: center;
             }
+            .btn {
+                background: #3498db;
+                background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+                background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+                background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+                background-image: -o-linear-gradient(top, #3498db, #2980b9);
+                background-image: linear-gradient(to bottom, #3498db, #2980b9);
+                -webkit-border-radius: 8;
+                -moz-border-radius: 8;
+                border-radius: 8px;
+                font-family: Arial;
+                color: #ffffff;
+                font-size: 20px;
+                padding: 10px 20px 10px 20px;
+                text-decoration: none;
+                }
+
+                .btn:hover {
+                background: #3cb0fd;
+                background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+                background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+                background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+                background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+                background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+                text-decoration: none;
+            }
         </style>
     </head>
     <body>
@@ -103,9 +129,10 @@
                 <div class="cell remove-border-bottom" data-index="8" id="c8"></div>
                 <div class="cell remove-border-bottom remove-border-right" data-index="9" id="c9"></div>
             </div>
-            <div class="hidden" id="result">
-                <p>The Winner is: <span id="winner"></span></p>
-            </div>
+        </div>
+        <div class="hidden" id="result">
+            <p>The Winner is: <span id="winner"></span></p>
+            <button class="btn" id="play-again" onclick="gameOver()">Play Again</button>
         </div>
         
         
@@ -154,7 +181,7 @@
                             console.log("c" + winningCondition[selectArray][i]);
                             $("#c" + winningCondition[selectArray][i]).addClass("outlineText");  
                         }
-                        $("h1").text("press any key to restart")
+                        $("h1").text("Game Over")
                         $(document).keypress(function(){
                             gameOver();
                         });
@@ -162,7 +189,7 @@
                     if(plays == 9 && result === false){
                         $("#result").removeClass("hidden");
                         $("#result").text("DRAW");
-                        $("h1").text("press any key to restart")
+                        $("h1").text("Game Over")
                         $(document).keypress(function(){
                             gameOver();
                         });
