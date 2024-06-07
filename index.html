@@ -171,8 +171,6 @@
                         currentState[currentPlayer].push(parseInt($(this).attr("data-index")));
                     }
 
-                    // $(this).text(currentPlayer);
-                    // currentState[currentPlayer].push(parseInt($(this).attr("data-index")));
                     result = isWinner();
                     if(result){
                         $("#result").removeClass("hidden");
@@ -198,7 +196,6 @@
                         currentPlayer = (currentPlayer === "X")? "O": "X" ;
                         validMove = false;
                     }
-                    // currentPlayer = (currentPlayer === "X")? "O": "X" ;
                 });
                    
             });
